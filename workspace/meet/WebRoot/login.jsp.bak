@@ -1,0 +1,163 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>用户登录</title>
+<link type="text/css" href="css/style.css" rel="stylesheet" />
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script language="javascript" type="text/javascript">
+</script>
+<style type="text/css">
+.label{
+	text-align:right;
+	padding-right:20px;
+}
+.field{
+	text-align:left;
+	padding-left:20px;
+}
+</style>
+</head>
+<body>
+<div class="top">
+	<div class="top1">
+    	<div class="logo">
+			<IMG src="images/logo3.png" width="480"/>
+		</div>
+    </div>
+</div>
+<form id="info" name="info" action="LoginInSystem.action" method="post">   
+<table width="800" align="center" cellpadding="0" cellspacing="0" style="margin-top:10px;margin-bottom:10px;">
+  <tr> 
+     <td height="24">
+       <Table border="0" cellspacing="0" cellpadding="0" align="center" width="100%"> 
+            <TR>
+              <TD height="24" class="edittitleleft">&nbsp;</TD>
+              <TD class="edittitle">用户登录</TD>
+              <TD class="edittitleright">&nbsp;</TD>
+            </TR>
+        </TABLE>
+     </td>
+   </tr>
+   <tr>
+     <td height="1" bgcolor="#8f8f8f"></td>
+   </tr>
+   <tr>
+     <td >
+     <table width="100%" align="center" cellpadding="1" cellspacing="1" class="editbody">
+       <tr>
+          <td width="35%" class="label"><font color="red">*</font> 用户名</td>
+          <td width="65%" class="field">
+          	<input type="text" name="params.userName" id="params.userName"  style="width:200px;"/>
+          	&nbsp;<label id="userNameTip" style="color:red"></label>
+          </td>
+        </tr> 
+        <tr>
+          <td class="label"><font color="red">*</font> 密　码</td>
+          <td class="field">
+            <input type="password" name="params.userPass" id="params.userPass" style="width:200px;"/>
+            &nbsp;<label id="userPassTip" style="color:red"></label>
+          </td>
+        </tr> 
+        <tr>
+          <td class="label"><font color="red">*</font> 验证码</td>
+          <td class="field">
+           <input type="text" id="params.random" name="params.random" style="width:80px;" class="inputstyle"/>
+		   &nbsp;<img src="Random.jsp" width="60" height="22" style="cursor:pointer;padding-top:5px" title="换一张" id="safecode" border="0" onClick="reloadcode()"/>
+		   &nbsp;<label id="randomTip" style="color:red"></label>
+          </td>
+        </tr> 
+     </table>
+     </td>
+   </tr>  
+   <tr>
+     <td>
+       <table width="100%" align="center" cellpadding="0" cellspacing="0" class="editbody">
+        <tr class="editbody">
+          <td align="center" height="30">
+          	<input type="button" id="addBtn" Class="btnstyle" value="登 录" />&nbsp;&nbsp;&nbsp;&nbsp;
+          	<input type="button" id="regBtn" Class="btnstyle" value="注 册" />
+            &nbsp;<label style="color:red">${tip}</label>
+          </td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+</table>
+</form>
+<form id="infoReg" action="Admin_reg.action" method="get">  
+</form>
+<script language="javascript" type="text/javascript">
+//实现验证码点击刷新
+function reloadcode(){
+	var verify=document.getElementById('safecode');
+	verify.setAttribute('src','Random.jsp?'+Math.random());
+}
+$(document).ready(function(){
+	var addBtn = $("#addBtn");
+	var regBtn = $("#regBtn");
+	var userName = $("#params\\.userName");
+	var userPass = $("#params\\.userPass");
+	var random = $("#params\\.random");
+	
+	var name=/^[a-zA-Z][a-zA-Z0-9_]{3,14}$/;
+    var pass=/^[a-zA-Z0-9]{6,14}$/;
+    var age=/^\d+$/;
+    var mail=/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
+    
+    userName.blur(function(){
+    	if(userName.val()==""){
+			$("#userNameTip").html("用户名不能为空");
+			return;
+		}else if(!name.exec(userName.val())){
+			$("#userNameTip").html("用户名必须为字母开头4位以上字符");
+			return;
+		}else{
+			$("#userNameTip").html('');
+		}
+    });
+    userPass.blur(function(){
+    	if(userPass.val()==""){
+    		$("#userPassTip").html("密码不能为空");
+			return;
+		}else if(!pass.exec(userPass.val())){
+			$("#userPassTip").html("密码必须为6位以上字符");
+			return;
+		}else{
+			$("#userPassTip").html('');
+		}
+    });
+  
+	random.blur(function(){
+    	if(random.val()==''){
+			$("#randomTip").html("验证码不能为空");
+			return;
+		}else{
+			$("#randomTip").html('');
+		}
+    });
+    
+	addBtn.bind("click",function(){
+		
+		var tips = $("#userNameTip").html()
+				  +$("#userPassTip").html()
+				  +$("#randomTip").html();
+		
+		if(tips!=""){
+			alert('请按照提示输入登录信息!');
+			return;
+		}
+		
+		$("#info").submit();
+	});
+	
+	regBtn.bind("click",function(){
+		window.open("Admin_reg.action");
+	});
+});
+</script>
+</body>
+</html>
